@@ -96,8 +96,20 @@ def fill_even_indices_with_sin(pe, position, div_term):
     pe[:, even] = vals.to(pe.dtype)
     return pe
 
-# Step 11 - fill_odd_indices_with_cos (not yet solved)
-# TODO: implement
+# Step 11 - fill_odd_indices_with_cos
+import torch
+
+def fill_odd_indices_with_cos(pe, position, div_term):
+    # even feature columns: 0, 2, 4, ...
+    odd = torch.arange(1, pe.shape[1], 2)
+
+    # sin(position * div_term), shape (seq_len, d_model//2)
+    vals = torch.cos(position * div_term)
+    if vals.ndim == 1:
+        vals = vals.unsqueeze(0)  # (1, d_model//2) so it broadcasts over rows
+
+    pe[:, odd] = vals.to(pe.dtype)
+    return pe
 
 # Step 12 - build_sinusoidal_positional_encoding (not yet solved)
 # TODO: implement
